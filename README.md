@@ -1,1 +1,1 @@
-Here i`m trying to build nn from scrath in Python.
+Here i`m trying to build nn from scrath in Python from tutorial on Youtube.
