@@ -7,11 +7,22 @@ X = [[1, 2, 3, 2.5],
      [-1.5, 2.7, 3.3, -0.8]]
 
 
-class Layer():
+class Layer:
+	
 	def __init__(self, n_inputs, n_neurons):
 		self.weights = 0.1 * np.random.randn(n_inputs, n_neurons)
 		self.biases = np.zeros(n_neurons)
 	
-	def forward(self):
-		pass
+	def process(self, inputs):
+		self.output = np.dot(inputs, self.weights) + self.biases
 
+
+
+
+layer1 = Layer(4, 5)
+layer2 = Layer(5, 2)
+
+layer1.process(X)
+# print(layer1.output)
+layer2.process(layer1.output)
+print(layer2.output)
