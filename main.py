@@ -79,7 +79,6 @@ class Loss_categoricalCrossEntropy(Loss):
         return negative_log_likelihoods
 
 
-# Вычисление точности нейронной сети путем
 # Из батча данных получившихся на выходе ищем процент совпавших с целевыми.
 def accuracy(inputs, targets):
     # Вернуть массив с номерами максимальных чисел каждой строки батча
