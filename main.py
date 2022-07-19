@@ -1,8 +1,4 @@
 import numpy as np
-import nnfs
-from nnfs.datasets import spiral_data
-
-nnfs.init()
 
 
 # Слой нейронов
@@ -27,7 +23,7 @@ class Activation_ReLu:
         self.output = np.maximum(0, inputs)
 
 
-# Софтмакс активация
+# Софтмакс активация (доли экспонент) 
 
 # 1 Из всех элементов батча вычитается максимальный => все эл. < 0, макс. = 0
 # 2 Вычислить экспоненту всех элементов.
@@ -44,8 +40,8 @@ class Activation_Softmax:
 
 # Вычисление лосса.
 # На вход результат софтмакс и батч строк по типу [0, 0, 1, 0],
-# где 1 - желаемый выход нейронной сети (максимальное значение софтмакс)
-# На выход - цифра, обозначающая отклонение от правды (чем больше, тем хуже)
+# где 1 - желаемый выход нейронной сети (максимальное значение софтмакс);
+# На выходе - цифра, обозначающая отклонение от правды (чем больше, тем хуже). 
 class Loss:
     def calculate(self, y_predictions, y_true):
         # Прогнать данные по функции forward соответсвующего типа лосса.
@@ -54,14 +50,14 @@ class Loss:
         data_loss = np.mean(sample_loss)
         return data_loss
 
-
+# Вычисление лосса с помощью отрицательного логарифма. 
 class Loss_categoricalCrossEntropy(Loss):
     def forward(self, y_predictions, y_true):
-        # Установить данные в промежуток между 1е-7 до 1-1е-7
+        # Установить данные в промежуток между 1е-7 до 1 - 1е-7
         # чтобы избежать логарфима 0.
         y_predictions = np.clip(y_predictions, 1e-7, 1 - 1e-7)
         
-        # Если искомые данные выглядят так [2, 1]
+        # Если искомые данные выглядят так [1, 0]
         if len(y_true.shape) == 1:
             # Создать строку с данными из массива y_predictions
             # под номерами y_true.
@@ -73,8 +69,7 @@ class Loss_categoricalCrossEntropy(Loss):
             # с суммами элементов всех строк.
             correct_confidences = np.sum(y_predictions * y_true, axis=1)
         
-        # Взять отрицательный логарфим всех элементов из получившегося
-        # массива нужных нам данных.
+        # Взять отрицательный логарфим элементов из получившегося массива 
         negative_log_likelihoods = -np.log(correct_confidences)
         return negative_log_likelihoods
 
